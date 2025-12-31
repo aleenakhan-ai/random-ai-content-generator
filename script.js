@@ -1,3 +1,4 @@
+// DOM
 const categorySelect = document.getElementById('category');
 const generateBtn = document.getElementById('generate');
 const resultCard = document.getElementById('result-card');
@@ -7,23 +8,6 @@ const copyBtn = document.getElementById('copy-btn');
 const downloadBtn = document.getElementById('download-btn');
 const darkModeToggle = document.getElementById('dark-mode');
 
-// Fallback arrays
-const quotesFallback = [
-  "Believe in yourself! 🌟",
-  "Code is fun! 😎",
-  "Never give up! 💪"
-];
-const textsFallback = [
-  "Stay Positive! 😄",
-  "Dream Big! 🚀",
-  "Keep Smiling! 😊"
-];
-
-// Helper function for random array item
-function getRandomItem(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
 // Fetch with timeout
 function fetchWithTimeout(url, timeout = 4000) {
   return Promise.race([
@@ -32,7 +16,6 @@ function fetchWithTimeout(url, timeout = 4000) {
   ]);
 }
 
-// Generate content
 generateBtn.addEventListener('click', () => {
   const category = categorySelect.value;
 
@@ -42,46 +25,51 @@ generateBtn.addEventListener('click', () => {
   resultImg.src = '';
   resultImg.classList.add('hidden');
 
-  if(category === 'meme') {
+  if (category === 'meme') {
     fetchWithTimeout('https://meme-api.com/gimme')
       .then(data => {
-        resultText.textContent = data.title || "Random Meme 😎";
-        if(data.url){
+        resultText.textContent = data.title || "Meme 😎";
+        if (data.url) {
           resultImg.src = data.url;
           resultImg.classList.remove('hidden');
         }
       })
       .catch(() => {
-        resultText.textContent = "Failed to fetch meme. Try again!";
+        resultText.textContent = "Couldn't load a meme. Try again!";
       });
 
-  } else if(category === 'quote') {
-    fetchWithTimeout('https://api.quotable.io/random')
+  } else if (category === 'quote') {
+    // Better quote API
+    fetchWithTimeout('https://www.quotify.top/api/random')
       .then(data => {
-        resultText.textContent = `"${data.content}" — ${data.author}`;
+        // Response from Quotify → "quote" field
+        resultText.textContent = data.quote || "Keep smiling! 😊";
       })
       .catch(() => {
-        resultText.textContent = getRandomItem(quotesFallback);
+        resultText.textContent = "Couldn't fetch a quote. Try again!";
       });
 
-  } else if(category === 'text') {
-    fetchWithTimeout('https://api.adviceslip.com/advice')
+  } else if (category === 'text') {
+    // ZenQuotes image — gives image URL directly
+    fetchWithTimeout('https://zenquotes.io/api/random')
       .then(data => {
-        resultText.textContent = `"${data.slip.advice}"`;
+        let q = data[0]?.q || "Stay positive!";
+        let a = data[0]?.a ? ` — ${data[0].a}` : "";
+        resultText.textContent = `"${q}"${a}`;
       })
       .catch(() => {
-        resultText.textContent = getRandomItem(textsFallback);
+        resultText.textContent = "Stay positive! 🌟";
       });
   }
 });
 
-// Copy to clipboard
+// Copy
 copyBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(resultText.textContent)
     .then(() => alert('Copied to clipboard!'));
 });
 
-// Download as PNG
+// Download PNG
 downloadBtn.addEventListener('click', () => {
   const canvas = document.createElement('canvas');
   canvas.width = 500;
@@ -98,7 +86,5 @@ downloadBtn.addEventListener('click', () => {
   link.click();
 });
 
-// Dark mode toggle
-darkModeToggle.addEventListener('change', () => {
-  document.body.classList.toggle('dark');
-});
+// Dark Mode
+darkModeToggle.addEventListener('change', () => document.body.classList.toggle('dark'));
