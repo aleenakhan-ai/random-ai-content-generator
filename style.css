@@ -44,11 +44,6 @@ select, button {
   transition: all 0.3s;
 }
 
-select {
-  background: #fff;
-  color: #333;
-}
-
 button {
   background-color: #ff5722;
   color: #fff;
