@@ -1,6 +1,6 @@
 body {
   font-family: 'Arial', sans-serif;
-  background: #f0f0f0;
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
   color: #333;
   display: flex;
   justify-content: center;
@@ -14,10 +14,20 @@ body {
 .container {
   max-width: 500px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 h1 {
   color: #ff5722;
+  margin-bottom: 5px;
+}
+
+p {
+  color: #555;
+  margin-bottom: 20px;
 }
 
 .controls {
@@ -25,19 +35,24 @@ h1 {
 }
 
 select, button {
-  padding: 10px 15px;
+  padding: 12px 18px;
   margin: 5px;
   font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  border-radius: 8px;
+  border: 2px solid #ff5722;
   cursor: pointer;
+  transition: all 0.3s;
+}
+
+select {
+  background: #fff;
+  color: #333;
 }
 
 button {
   background-color: #ff5722;
-  color: white;
+  color: #fff;
   border: none;
-  transition: background 0.3s;
 }
 
 button:hover {
@@ -45,11 +60,23 @@ button:hover {
 }
 
 .card {
-  background: white;
+  background: linear-gradient(145deg, #fceabb, #f8b500);
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
   margin-top: 20px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+#result-img {
+  max-width: 100%;
+  margin-top: 15px;
+  border-radius: 10px;
 }
 
 .hidden {
@@ -71,12 +98,16 @@ button:hover {
 
 /* Dark mode */
 body.dark {
-  background: #121212;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
   color: #f5f5f5;
 }
 
+body.dark .container {
+  background: rgba(30, 30, 30, 0.85);
+}
+
 body.dark .card {
-  background: #1e1e1e;
+  background: linear-gradient(145deg, #2c2a3f, #4b4a6b);
 }
 
 body.dark button {
