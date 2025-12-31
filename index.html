@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random AI Content Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Random AI Content Generator</h1>
+    <p>Generate fun memes, inspiring quotes, or custom text images in a click!</p>
+
+    <div class="controls">
+      <select id="category">
+        <option value="meme">Meme</option>
+        <option value="quote">Quote</option>
+        <option value="text">Text Image</option>
+      </select>
+      <button id="generate">Generate</button>
+    </div>
+
+    <div id="result-card" class="card hidden">
+      <p id="result-text"></p>
+      <div class="buttons">
+        <button id="copy-btn">Copy</button>
+        <button id="download-btn">Download PNG</button>
+      </div>
+    </div>
+
+    <div class="dark-mode-toggle">
+      <label>
+        <input type="checkbox" id="dark-mode"> Dark Mode
+      </label>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
