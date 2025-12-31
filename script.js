@@ -8,7 +8,7 @@ const copyBtn = document.getElementById('copy-btn');
 const downloadBtn = document.getElementById('download-btn');
 const darkModeToggle = document.getElementById('dark-mode');
 
-// Fetch with timeout
+// Fetch with timeout (helper)
 function fetchWithTimeout(url, timeout = 4000) {
   return Promise.race([
     fetch(url).then(res => res.json()),
@@ -16,6 +16,7 @@ function fetchWithTimeout(url, timeout = 4000) {
   ]);
 }
 
+// Generate content
 generateBtn.addEventListener('click', () => {
   const category = categorySelect.value;
 
@@ -28,7 +29,7 @@ generateBtn.addEventListener('click', () => {
   if (category === 'meme') {
     fetchWithTimeout('https://meme-api.com/gimme')
       .then(data => {
-        resultText.textContent = data.title || "Meme 😎";
+        resultText.textContent = data.title || "Random Meme 😎";
         if (data.url) {
           resultImg.src = data.url;
           resultImg.classList.remove('hidden');
@@ -39,37 +40,42 @@ generateBtn.addEventListener('click', () => {
       });
 
   } else if (category === 'quote') {
-    // Better quote API
-    fetchWithTimeout('https://www.quotify.top/api/random')
+    // Better quote API: QuoteSlate
+    fetchWithTimeout('https://quoteslate.vercel.app/api/quotes/random')
       .then(data => {
-        // Response from Quotify → "quote" field
-        resultText.textContent = data.quote || "Keep smiling! 😊";
+        if (data && data.quote && data.author) {
+          resultText.textContent = `"${data.quote}" — ${data.author}`;
+        } else {
+          throw new Error("No data");
+        }
       })
       .catch(() => {
-        resultText.textContent = "Couldn't fetch a quote. Try again!";
+        resultText.textContent = "Keep going, you're doing great! 💪";
       });
 
   } else if (category === 'text') {
-    // ZenQuotes image — gives image URL directly
-    fetchWithTimeout('https://zenquotes.io/api/random')
+    // For text image, reuse quote API if needed
+    fetchWithTimeout('https://quoteslate.vercel.app/api/quotes/random')
       .then(data => {
-        let q = data[0]?.q || "Stay positive!";
-        let a = data[0]?.a ? ` — ${data[0].a}` : "";
-        resultText.textContent = `"${q}"${a}`;
+        if (data && data.quote) {
+          resultText.textContent = data.quote;
+        } else {
+          throw new Error("No data");
+        }
       })
       .catch(() => {
-        resultText.textContent = "Stay positive! 🌟";
+        resultText.textContent = "Stay positive and keep learning! 😊";
       });
   }
 });
 
-// Copy
+// Copy to clipboard
 copyBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(resultText.textContent)
     .then(() => alert('Copied to clipboard!'));
 });
 
-// Download PNG
+// Download as PNG
 downloadBtn.addEventListener('click', () => {
   const canvas = document.createElement('canvas');
   canvas.width = 500;
@@ -86,5 +92,5 @@ downloadBtn.addEventListener('click', () => {
   link.click();
 });
 
-// Dark Mode
+// Dark mode toggle
 darkModeToggle.addEventListener('change', () => document.body.classList.toggle('dark'));
